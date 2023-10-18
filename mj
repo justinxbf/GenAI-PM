@@ -1,0 +1,34 @@
+import csv
+from datetime import datetime
+
+# Define the file paths for the two data files
+file1_path = 'Construction_Data_PM_Forms_All_Projects (2).csv'
+file2_path = 'Construction_Data_PM_Tasks_All_Projects.csv'
+
+# Define the date format in your CSV files
+date_format = '%Y-%m-%d'  # Adjust to match your date format
+
+# Get the current date
+current_date = datetime.now().date()
+
+# Initialize counters
+overdue_count = 0
+
+# Read and process data from the first file
+with open(file1_path, 'r', newline='') as file1:
+    reader = csv.DictReader(file1)
+    for row in reader:
+        due_date = datetime.strptime(row['Due Date'], date_format).date()
+        if due_date < current_date:
+            overdue_count += 1
+
+# Read and process data from the second file
+with open(file2_path, 'r', newline='') as file2:
+    reader = csv.DictReader(file2)
+    for row in reader:
+        due_date = datetime.strptime(row['Due Date'], date_format).date()
+        if due_date < current_date:
+            overdue_count += 1
+
+# Print the total number of overdue tasks
+print(f"Total number of overdue tasks: {overdue_count}")
