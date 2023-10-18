@@ -1,9 +1,48 @@
 import csv
+# DEFINE THE FILE PATHS FOR THE TWO CSV DATA FILES
+FILE1_PATH = (
+    'Construction_Data_PM_Forms_All_Projects (2).csv'  # Replace with the path to your first CSV file
+)
+FILE2_PATH = (
+    'Construction_Data_PM_Tasks_All_Projects.csv'  # Replace with the path to your second CSV file
+)
+
+# DEFINE THE COLUMN NAME TO CHECK FOR "TRUE"
+COLUMN_TO_CHECK = 'OverDue'  # Replace with the actual column name
+
+# INITIALIZE COUNTERS FOR "TRUE" VALUES IN BOTH FILES
+TRUE_COUNT_FILE1 = 0
+TRUE_COUNT_FILE2 = 0
+
+# FUNCTION TO COUNT "TRUE" VALUES IN A CSV FILE
+def count_true_values(csv_file):
+    with open(csv_file, 'r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        count = 0
+        for row in reader:
+            if row[COLUMN_TO_CHECK] == "TRUE":
+                count += 1
+        return count
+
+# COUNT "TRUE" VALUES IN BOTH FILES
+TRUE_COUNT_FILE1 = count_true_values(FILE1_PATH)
+TRUE_COUNT_FILE2 = count_true_values(FILE2_PATH)
+
+# PRINT THE TOTAL COUNTS OF "TRUE" VALUES IN BOTH FILES
+# Before:
+print(f"Total count of 'TRUE' in column '{COLUMN_TO_CHECK}' for Construction_Data_PM_Forms_All_Projects (2).csv: {TRUE_COUNT_FILE1}")
+
+# After (broken into multiple lines for readability):
+print(
+    f"Total count of 'TRUE' in column '{COLUMN_TO_CHECK}' for Construction_Data_PM_Tasks_All_Projects.csv: "
+    f"{TRUE_COUNT_FILE1}"
+)
+import csv
 from datetime import datetime
 
 # Define the file paths for the two data files
-file1_path = 'Construction_Data_PM_Forms_All_Projects (2).csv'
-file2_path = 'Construction_Data_PM_Tasks_All_Projects.csv'
+FILE1_PATH = 'Construction_Data_PM_Forms_All_Projects (2).csv'  # Replace with the path to your first CSV file
+FILE2_PATH = 'Construction_Data_PM_Tasks_All_Projects.csv'  # Replace with the path to your second CSV file
 
 # Define the date format in your CSV files
 date_format = '%Y-%m-%d'  # Adjust to match your date format
@@ -12,23 +51,25 @@ date_format = '%Y-%m-%d'  # Adjust to match your date format
 current_date = datetime.now().date()
 
 # Initialize counters
-overdue_count = 0
+overdue_count1 = 0
+overdue_count2 = 0
 
-# Read and process data from the first file
-with open(file1_path, 'r', newline='') as file1:
-    reader = csv.DictReader(file1)
-    for row in reader:
-        due_date = datetime.strptime(row['Due Date'], date_format).date()
-        if due_date < current_date:
-            overdue_count += 1
+# Function to count 'TRUE' values in a CSV file
+def count_true_values(csv_file):
+    with open(csv_file, 'r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        count = 0
+        for row in reader:
+            if row['OverDue'] == 'TRUE':
+                count += 1
+        return count
 
-# Read and process data from the second file
-with open(file2_path, 'r', newline='') as file2:
-    reader = csv.DictReader(file2)
-    for row in reader:
-        due_date = datetime.strptime(row['Due Date'], date_format).date()
-        if due_date < current_date:
-            overdue_count += 1
+# Count 'TRUE' values in the first file
+overdue_count1 = count_true_values(FILE1_PATH)
 
-# Print the total number of overdue tasks
-print(f"Total number of overdue tasks: {overdue_count}")
+# Count 'TRUE' values in the second file
+overdue_count2 = count_true_values(FILE2_PATH)
+
+# Print the counts
+print(f"Total count of 'TRUE' in column 'OverDue' for {FILE1_PATH}: {overdue_count1}")
+print(f"Total count of 'TRUE' in column 'OverDue' for {FILE2_PATH}: {overdue_count2}")
